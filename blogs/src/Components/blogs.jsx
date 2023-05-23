@@ -9,21 +9,19 @@ import FilterBar from './FilterBar';
 export default function Blogs() {
   const blogPosts = blogData.blogPosts;
   const itemsPerPage = 6;
-
   // Filter state
   const [filterQuery, setFilterQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterDate, setFilterDate] = useState('');
-
   // Filtered and paginated blog posts
   const [filteredBlogPosts, setFilteredBlogPosts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Apply the filters and update the filtered blog posts
-  useEffect(() => {
+ // Apply the filters and update the filtered blog posts
+useEffect(() => {
     let filteredPosts = blogPosts;
-
+  
     if (filterQuery) {
       filteredPosts = filteredPosts.filter(
         (post) =>
@@ -32,18 +30,24 @@ export default function Blogs() {
           post.author.toLowerCase().includes(filterQuery.toLowerCase())
       );
     }
-
+  
     if (filterCategory) {
       filteredPosts = filteredPosts.filter(
         (post) => post.category === filterCategory
       );
     }
 
+    if (filterDate) {
+        filteredPosts = filteredPosts.filter(
+          (post) => post.date === filterDate
+        );
+      }
+  
     setFilteredBlogPosts(filteredPosts);
     setTotalPages(Math.ceil(filteredPosts.length / itemsPerPage));
     setCurrentPage(1); // Reset current page to 1 when filters change
-  }, [filterQuery, filterCategory]);
-
+  }, [filterQuery, filterCategory,filterDate]);
+  
   // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -51,9 +55,10 @@ export default function Blogs() {
 
   // Handle filter change
   const handleFilterChange = (query, category, date) => {
+    console.log(query, category, date);
     setFilterQuery(query);
     setFilterCategory(category);
-    setFilterDate(date);
+    setFilterDate(date)
   };
 
   // Get the paginated blog posts to display
