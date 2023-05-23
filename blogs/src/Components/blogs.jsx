@@ -1,47 +1,104 @@
 import React, { useState } from 'react';
 import Pagination from './Pagination';
-import group from "../Assets/Group.png"
-import "./Styles.css"
+import group from '../Assets/Group.png';
+import './Styles.css';
 import ActionAreaCard from './Card';
-import blogData from "../data.json";
-// import Pagination from '@mui/material/Pagination';
+import blogData from '../data.json';
+import FilterBar from './FilterBar';
 export default function Blogs() {
-    const blogPosts = blogData.blogPosts;
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(blogPosts.length / itemsPerPage);
+  const blogPosts = blogData.blogPosts;
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(blogPosts.length / itemsPerPage);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Filter state
+  const [filterQuery, setFilterQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterDate, setFilterDate] = useState('');
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Handle filter change
+  const handleFilterChange = (query, category, date) => {
+    setFilterQuery(query);
+    setFilterCategory(category);
+    setFilterDate(date);
+    setCurrentPage(1); // Reset current page to 1 when filters change
+  };
+
+  // Apply the filters and get the filtered blog posts
+  const applyFilters = () => {
+    let filteredPosts = blogPosts;
   
-    const [currentPage, setCurrentPage] = useState(1);
+    if (filterQuery) {
+      filteredPosts = filteredPosts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(filterQuery.toLowerCase()) ||
+          post.category.toLowerCase().includes(filterQuery.toLowerCase()) ||
+          post.author.toLowerCase().includes(filterQuery.toLowerCase())
+      );
+    }
   
-    // Calculate the index range for the current page
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    if (filterCategory) {
+      filteredPosts = filteredPosts.filter(
+        (post) => post.category === filterCategory
+      );
+    }
   
-    // Get the blog posts to display for the current page
-    const displayedBlogPosts = blogPosts.slice(startIndex, endIndex);
+    return filteredPosts;
+  };
   
-    // Handle page change
-    const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
-    };
-   return (
-   <>
-   <div className="container">
-  <img src={group} alt="blog-img" />
-  <div className="blogs-main">
-    <h1>BLOGS</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
-  </div>
-</div>
-    <section className='blog-section'>
+  
+  
+
+  // Get the filtered and paginated blog posts to display
+  const displayedBlogPosts = applyFilters().slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  return (
+    <>
+      <div className="container">
+        <img src={group} alt="blog-img" />
+        <div className="blogs-main">
+          <h1>BLOGS</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat
+          </p>
+        </div>
+      </div>
+      <section className="blog-section">
         <h2>BLOGS</h2>
-        <p>Located in Mumbai, Godrej Archives is the Godrej group's business archive. The Archives collects, preserves and manages records covering 121 years of the company's history. The idea was mooted in 1997, the group's centenary year, by Mr. Sohrab Godrej, former chairman of the Godrej group</p>
-        <ActionAreaCard blogPosts={displayedBlogPosts}/>
-        <br/>
-        <Pagination currentPage={currentPage} totalPages={totalPages} onChangePage={handlePageChange} />
-        </section>
-    <div>
-       <br/>
-    </div>
-   </>
+        <p>
+          Located in Mumbai, Godrej Archives is the Godrej group's business
+          archive. The Archives collects, preserves and manages records
+          covering 121 years of the company's history. The idea was mooted in
+          1997, the group's centenary year, by Mr. Sohrab Godrej, former
+          chairman of the Godrej group
+        </p>
+        <FilterBar
+          onFilterChange={handleFilterChange}
+          categoryOptions={blogPosts}
+        />
+        <ActionAreaCard blogPosts={displayedBlogPosts} />
+        <br />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onChangePage={handlePageChange}
+        />
+      </section>
+      <div>
+        <br />
+      </div>
+    </>
   );
 }
