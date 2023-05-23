@@ -69,7 +69,7 @@ useEffect(() => {
   return (
     <>
       <div className="container">
-        <img src={group} alt="blog-img" />
+        <img src={group} alt="blog-img" className='blogmain-img'/>
         <div className="blogs-main">
           <h1>BLOGS</h1>
           <p>

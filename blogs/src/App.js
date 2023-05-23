@@ -1,13 +1,12 @@
 import './App.css';
-// import ActionAreaCard from './Components/Card';
+import Footer from './Components/Footer';
 import Blogs from './Components/blogs';
 
 function App() {
   return (
     <div className="App">
-    
-     <Blogs/>
-      {/* <ActionAreaCard/> */}
+         <Blogs/>
+         <Footer/>
     </div>
   );
 }

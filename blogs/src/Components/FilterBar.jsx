@@ -42,7 +42,7 @@ export default function FilterBar({ onFilterChange, categoryOptions }) {
   return (
     <div className="filter-bar">
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={12} lg={3}>
           <TextField
             placeholder="Search..."
             value={searchQuery}
@@ -55,11 +55,11 @@ export default function FilterBar({ onFilterChange, categoryOptions }) {
             }}
             size="small"
             fullWidth
+            style={{background:"#F6F5FC"}}
           />
         </Grid>
-        <Grid item xs={4}>
-          <FormControl variant="outlined" fullWidth>
-            {/* <InputLabel>Category</InputLabel> */}
+        <Grid item xs={12} lg={3}>
+          <FormControl variant="outlined" fullWidth style={{background:"#F6F5FC"}}>
             <Select
               value={selectedCategory}
               onChange={handleCategoryChange}
@@ -71,24 +71,23 @@ export default function FilterBar({ onFilterChange, categoryOptions }) {
               }}
               size='small'
             >
-              <MenuItem value="">
+              <MenuItem value="" className="menu-item">
                 Category
               </MenuItem>
               {categorySet.map((category, index) => (
-                <MenuItem key={index} value={category}>
+                <MenuItem key={index} value={category} className='menuItem'>
                   {category}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={4}>
-        <FormControl variant="outlined" fullWidth>
-            {/* <InputLabel>Category</InputLabel> */}
+        <Grid item xs={12} lg={3}>
+        <FormControl variant="outlined" fullWidth style={{background:"#F6F5FC"}}>
             <Select
               value={selectedDateRange}
               onChange={handleDateRangeChange}
-              startAdornment={<CalendarTodayIcon fontSize="small" />}
+              startAdornment={<CalendarTodayIcon  style={{marginRight:"5px",fontSize:"15px"}}/>}
               displayEmpty
               inputProps={{
                 name: 'selectDate',
@@ -96,24 +95,27 @@ export default function FilterBar({ onFilterChange, categoryOptions }) {
               }}
               size='small'
             >
-              <MenuItem value="">
+              <MenuItem value="" className="menu-item" >
               Date
               </MenuItem>
               {datePicker.map((date, index) => (
-                <MenuItem key={index} value={date}>
+                <MenuItem key={index} value={date} className='menuItem'>
                   {date}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
-      </Grid>
-
-      <div className="button-container">
+        <Grid xs={12} lg={3} justifyContent="center" className="button-container">
+        {/* <div > */}
         <Button onClick={handleReset}><img src={reset} alt="reset-icon" style={{width:"40%",marginRight:"6%"}}/>Reset</Button>  
         <Button onClick={handleExplore}>Explore</Button>
      
-      </div>
+      {/* </div> */}
+        </Grid>
+      </Grid>
+
+      
     </div>
   );
 }
