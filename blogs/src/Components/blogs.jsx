@@ -1,21 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from './Pagination';
 import group from '../Assets/Group.png';
 import './Styles.css';
 import ActionAreaCard from './Card';
 import blogData from '../data.json';
 import FilterBar from './FilterBar';
+
 export default function Blogs() {
   const blogPosts = blogData.blogPosts;
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(blogPosts.length / itemsPerPage);
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   // Filter state
   const [filterQuery, setFilterQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterDate, setFilterDate] = useState('');
+
+  // Filtered and paginated blog posts
+  const [filteredBlogPosts, setFilteredBlogPosts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Apply the filters and update the filtered blog posts
+  useEffect(() => {
+    let filteredPosts = blogPosts;
+
+    if (filterQuery) {
+      filteredPosts = filteredPosts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(filterQuery.toLowerCase()) ||
+          post.category.toLowerCase().includes(filterQuery.toLowerCase()) ||
+          post.author.toLowerCase().includes(filterQuery.toLowerCase())
+      );
+    }
+
+    if (filterCategory) {
+      filteredPosts = filteredPosts.filter(
+        (post) => post.category === filterCategory
+      );
+    }
+
+    setFilteredBlogPosts(filteredPosts);
+    setTotalPages(Math.ceil(filteredPosts.length / itemsPerPage));
+    setCurrentPage(1); // Reset current page to 1 when filters change
+  }, [filterQuery, filterCategory]);
 
   // Handle page change
   const handlePageChange = (pageNumber) => {
@@ -27,39 +54,12 @@ export default function Blogs() {
     setFilterQuery(query);
     setFilterCategory(category);
     setFilterDate(date);
-    setCurrentPage(1); // Reset current page to 1 when filters change
   };
 
-  // Apply the filters and get the filtered blog posts
-  const applyFilters = () => {
-    let filteredPosts = blogPosts;
-  
-    if (filterQuery) {
-      filteredPosts = filteredPosts.filter(
-        (post) =>
-          post.title.toLowerCase().includes(filterQuery.toLowerCase()) ||
-          post.category.toLowerCase().includes(filterQuery.toLowerCase()) ||
-          post.author.toLowerCase().includes(filterQuery.toLowerCase())
-      );
-    }
-  
-    if (filterCategory) {
-      filteredPosts = filteredPosts.filter(
-        (post) => post.category === filterCategory
-      );
-    }
-  
-    return filteredPosts;
-  };
-  
-  
-  
-
-  // Get the filtered and paginated blog posts to display
-  const displayedBlogPosts = applyFilters().slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // Get the paginated blog posts to display
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedBlogPosts = filteredBlogPosts.slice(startIndex, endIndex);
 
   return (
     <>
@@ -84,10 +84,7 @@ export default function Blogs() {
           1997, the group's centenary year, by Mr. Sohrab Godrej, former
           chairman of the Godrej group
         </p>
-        <FilterBar
-          onFilterChange={handleFilterChange}
-          categoryOptions={blogPosts}
-        />
+        <FilterBar onFilterChange={handleFilterChange} categoryOptions={blogPosts}/>
         <ActionAreaCard blogPosts={displayedBlogPosts} />
         <br />
         <Pagination
