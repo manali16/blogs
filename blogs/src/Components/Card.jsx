@@ -1,30 +1,42 @@
-import * as React from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-
-export default function ActionAreaCard() {
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import "./Styles.css"
+export default function ActionAreaCard({ blogPosts }) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard 
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <div className="card-container">
+      {blogPosts.map((post, index) => (
+        <Card sx={{ maxWidth: 345 }} key={index}>
+          <CardActionArea>
+            <CardMedia component="img" height="140" image={post.img} alt="green iguana" />
+            <CardContent>
+              <Typography gutterBottom variant="p" component="div" className="post-category">
+                {post.category}
+              </Typography>
+              <Typography gutterBottom variant="h5" component="div" sx={{
+                fontFamily: 'Work Sans,SemiBold',
+                color: '#2F2F2F',
+                fontSize: '15px',
+                fontWeight: "bolder",
+                marginTop: '3vh',
+            }}>
+                {post.title}
+              </Typography>
+              <p>
+                <CalendarTodayIcon sx={{ fontSize: 15, marginRight: 1 }} /> {post.date}
+              </p>
+              <p>
+                <Person2OutlinedIcon sx={{ fontSize: 15, marginRight: 1 }} /> {post.author}
+              </p>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
+    </div>
   );
 }

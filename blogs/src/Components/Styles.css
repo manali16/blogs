@@ -44,3 +44,29 @@
     .blog-section{
         padding: 0 20vh;
     }
+    .post-category {
+        color: #2f2f2f;
+        font-family: 'Work Sans';
+        font-weight: bolder;
+        font-size: 13px;
+      }
+     
+    /* CSS for ActionAreaCard component */
+
+.card-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, 1fr); /* Display three cards per row */
+  }
+  
+  @media (max-width: 768px) {
+    /* Media query for screens wider than 768px */
+    .card-container {
+        grid-template-columns: 1fr; /* Display one card per row by default */
+
+    }
+    .blog-section {
+        padding: 0 3vh !important;
+    }
+  }
+  
