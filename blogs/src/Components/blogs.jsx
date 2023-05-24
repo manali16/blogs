@@ -46,7 +46,7 @@ useEffect(() => {
     setFilteredBlogPosts(filteredPosts);
     setTotalPages(Math.ceil(filteredPosts.length / itemsPerPage));
     setCurrentPage(1); // Reset current page to 1 when filters change
-  }, [filterQuery, filterCategory,filterDate]);
+  }, [filterQuery, filterCategory,filterDate,blogPosts]);
   
   // Handle page change
   const handlePageChange = (pageNumber) => {
